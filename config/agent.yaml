@@ -1,0 +1,26 @@
+# Agent Manifest — AgentRegistry entry point
+# AgentRegistry (mediator/registry/agent_registry.py) reads every key below at
+# ROOT level — do NOT nest keys under an `agent:` block.
+id: "CMN-C2-281"
+name: "SmartHREmployeeDataAgent"
+namespace: "cmn"
+version: "0.1.0"
+enabled: true
+category: "Cat 2"
+generation_mode: "llm"  # deterministic | llm
+industry: "CMN"
+
+base_type: "ToolCallingAgent"
+
+# Entry point — single dotted import path (module.Class), NOT split module:/class:.
+class: "src.graph.graph.SmartHREmployeeDataAgent"
+
+required_trust_level: "VERIFIED_EXTERNAL"
+
+# Compile-time gates — declare every ctx.secrets.require() key + constructed extra.
+# classify_intent (inner Step 2) enhances its deterministic keyword classifier
+# with an Azure OpenAI call; any failure degrades to the keyword result, but
+# the secrets/extra are still declared so require_at_compile() can see them.
+requires:
+  secrets: ["AZURE_OPENAI_API_KEY", "AZURE_OPENAI_ENDPOINT", "AZURE_OPENAI_DEPLOYMENT"]
+  extras: ["openai"]  # AzureOpenAIClient wraps langchain_openai.ChatOpenAI

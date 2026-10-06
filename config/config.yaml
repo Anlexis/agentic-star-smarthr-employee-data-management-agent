@@ -1,0 +1,14 @@
+# Runtime parameters — loaded by the registry and passed as Graph(config=...).
+# Separate from config/agent.yaml (the static manifest).
+
+# Consumed by the outer graph: the framework run loop validates max_retry at
+# compile time and re-runs the backbone up to this many times on a RETRY status.
+max_retry: 3
+# Deadline (seconds) for a single SmartHR call, forwarded to the inner graph by
+# SmartHRWorkflowGraphNode._parent_config() and enforced by CallSmartHrApiNode.
+timeout_s: 30
+
+# SmartHR REST API v1 connector settings, forwarded to the inner workflow graph
+# and read by CallSmartHrApiNode when it builds its client.
+smarthr:
+  base_url: "https://app.smarthr.jp/api/v1"
